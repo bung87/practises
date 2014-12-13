@@ -1,0 +1,279 @@
+
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>html5 canvas demo</title>
+
+   <style type="text/css">
+   html *{margin: 0;padding: 0}
+html, body { width:100%; height:100%; } /* just to be sure these are full screen*/
+
+canvas { display:block;background: #000; } /*otherwise scrollbar will be shown*/
+   </style>
+<script src="jquery-2.0.0.min.js"></script>
+  </head>
+  <body >
+    <canvas id="myCanvas" width="500" height="300"></canvas> 
+  </body>
+   <script type="text/javascript" charset="utf-8">
+   function protoType(o){
+    var s=Object.prototype.toString.call(o);
+   
+    return  s.split(" ")[1].slice(0,-1);
+   }
+function Circle(o){
+  for (n in o){
+    this[n]=o[n];
+  }
+
+}
+Circle.prototype={
+  setHelper:function(h){
+    this.helper=h;
+  },
+  getHelper:function(){
+    return this.helper;
+  },
+  setContext:function(ctx){
+    this.context=ctx;
+  },
+  getContext:function(){
+    return context;
+  },
+  setBack:function(d){
+    this.back=d;
+
+  },
+  getBack:function(){
+    return this.back;
+  },
+  move:function(x,y){
+     this.context.putImageData(this.getBack(),this.x-this.r,this.y-this.r);
+     this.x=x;this.y=y;
+    var imgData=this.context.getImageData(x-this.r,y-this.r,this.r*2,this.r*2);
+    var s=CanvasRenderingContext2D.prototype.createRadialGradient.apply(this.context,[x,y,0,x,y,this.r]);
+         for (var i = this.style.length - 1; i >= 0; i--) {
+        var stop=this.style[i][0];
+        var color=this.style[i][1];
+        try{
+          s.addColorStop(stop,color);
+        }catch(e){
+          console.log("");
+        }
+        
+      };
+    this.context.beginPath();
+    this.context.arc(x, y, this.r, 0, Math.PI*2, true);
+    this.context.closePath();
+    this.context.fillStyle=s;
+    this.context.fill();
+    this.setBack(imgData);
+    return this;
+  }
+};
+function DrawHelper(context){
+
+  this.context=context;
+  this.canvasWidth=context.canvas.width;
+  this.canvasHeight=context.canvas.height;
+}
+DrawHelper.prototype={
+
+  resize:function(){
+    var w = $(document).width();
+     var h = $(document).height();
+        this.context.canvas.setAttribute('width', w);
+       this.context.canvas.setAttribute('height', h);
+     this.canvasWidth=this.context.canvas.width;
+  this.canvasHeight=this.context.canvas.height;
+  // this.restore();
+  },
+  save:function(){
+    this.context.save();
+    // CanvasRenderingContext2D.prototype.save.call(this.context);
+  },
+  restore:function(){
+    this.context.restore();
+    // CanvasRenderingContext2D.prototype.restore.call(this.context);
+  },
+  setGradientArgs:function(){
+    this.gradientArgs=Array.prototype.slice.call(arguments);
+  },
+  retrieveStyle:function (style,styleType){
+     var s;
+    switch(protoType(style)){
+      case "Array"://[[stop,color],[stop,color]......]
+      var args=this.gradientArgs.join(',');
+        if(styleType=="linear"){
+          s=CanvasRenderingContext2D.prototype.createLinearGradient.apply(this.context,this.gradientArgs);
+          // s=eval("this.context.createLinearGradient("+args+");");
+        }else{
+          try{
+              s=CanvasRenderingContext2D.prototype.createRadialGradient.apply(this.context,this.gradientArgs);
+          }catch(e){
+             var x=this.gradientArgs[0];
+             var y=this.gradientArgs[1];
+             var w=this.gradientArgs[2];
+              var h=this.gradientArgs[3];
+              var r=Math.min(w/2,h/2);
+             var args=[w/2,h/2,0,w/2,h/2,Math.PI*360];
+          
+           s=CanvasRenderingContext2D.prototype.createRadialGradient.apply(this.context,args);
+          }
+          
+           // s=eval("this.context.createRadialGradient("+args+");");
+        }
+     
+      for (var i = style.length - 1; i >= 0; i--) {
+        var stop=style[i][0];
+        var color=style[i][1];
+        try{
+          s.addColorStop(stop,color);
+        }catch(e){
+          console.log("");
+        }
+        
+      };
+      break;
+      default ://String,CanvasGradient
+      s=style;
+    }
+    return s;
+  },
+  drawCircle:function(x,y,r,style,styleType){
+   
+     var imgData=helper.context.getImageData(x-r,y-r,r*2,r*2);
+    this.setGradientArgs(x,y,0,x,y,r);
+   var s=this.retrieveStyle(style,styleType);
+    if (protoType(s)=="Undefinded") return;
+    this.context.beginPath();
+    this.context.arc(x, y, r, 0, Math.PI*2, true);
+    this.context.closePath();
+    this.context.fillStyle=s;
+    this.context.fill();
+    var c=new Circle({x:x,y:y,r:r,style:style});
+    c.setContext(helper.context);
+    c.setHelper(helper);
+    c.setBack(imgData);
+    return c;
+  },
+  drawRect:function(x,y,w,h,style,styleType){
+    this.setGradientArgs(x,y,w,h);
+    var s=this.retrieveStyle(style,styleType);
+    if (protoType(s)=="Undefinded") return;
+    this.context.fillStyle=s;
+    this.context.fillRect(x,y,w,h);
+  }
+
+};
+var helper,startX,startY,circles=[],isDrawing=false;
+var c1,c2;
+$(function(){
+
+    var h = $(document).height();
+            var w = $(document).width();
+        var c=document.getElementById("myCanvas");
+        c.setAttribute('width', w);
+        c.setAttribute('height', h);
+         var cxt=c.getContext("2d");
+          helper=new DrawHelper(cxt);
+            var rstyle=[["0","#fff"],["1.0","#ccc"]];
+  helper.drawRect(0,0,helper.canvasWidth,helper.canvasHeight,rstyle,"radial");
+  // var style=[[0,"#fff"],[0.75,"#fff"],[1,"rgba(255,255,255,0.5)"]];
+    /*cxt.beginPath(); 
+      cxt.rect(10, 10, 60, 60); 
+      cxt.clip();*/ 
+      var done=false;
+      c1= helper.drawCircle(w/2,0,30,rstyle,"radial");
+      var speed=10;
+      var y=c1.y;
+      var des=h/2;
+      var endDes=des-100;
+      var it=setInterval(function(){
+        speed++;
+          if(c1.y+speed>des){
+          speed=des-c1.y;
+        }else if (c1.y+speed==des) {
+   
+        
+
+        }
+           y+=speed;
+         c1.move(c1.x,y);
+         if(c1.y==des){
+                   var it2=setInterval(function(){  
+              if(endDes!=c1.y){
+                 endDes++;
+                  speed--;
+               y-=speed;
+               
+              }else{
+                endDes--;
+                 speed++;
+                 y+=speed;
+               
+              }
+            c1.move(c1.x,y);
+
+          },41);
+            clearInterval(it); 
+         }
+        },41);
+    /*  while(!done){
+        if(c1.y>=h/2){
+          done=true;{clearInterval(it);}
+        }
+      }*/
+      c2=helper.drawCircle(w/2,h/2,30,rstyle,"radial");
+      circles.push(c1);
+});
+
+$(window).resize(function(){
+  // helper.resize();
+
+  });
+/*$(document).on('mousemove',function(){
+  
+     var rstyle=[["0","#fff"],["1.0","#ccc"]];
+   // helper.drawRect(0,0,helper.canvasWidth,helper.canvasHeight,rstyle,"radial");
+  
+  isDrawing=true;
+ 
+  // 
+  if(event.clientX>startX){
+   for (var i = circles.length - 1; i >= 0; i--) {
+    circles[i].x++;
+   };
+  }else{
+       for (var i = circles.length - 1; i >= 0; i--) {
+    circles[i].x--
+   };
+  }
+  if(event.clientY>startY){
+       for (var i = circles.length - 1; i >= 0; i--) {
+    circles[i].y++;
+   };
+  }else{
+      for (var i = circles.length - 1; i >= 0; i--) {
+    circles[i].y--;
+   };
+  }
+  var rstyle=[["0","#fff"],["1.0","#ccc"]];
+  // helper.drawRect(0,0,helper.canvasWidth,helper.canvasHeight,rstyle,"linear");
+   for (var i = circles.length - 1; i >= 0; i--) {
+    circles[i].move(circles[i].x,circles[i].y);
+     
+   };
+  
+ startX=event.clientX;
+  startY=event.clientY;
+  isDrawing=false;
+});*/
+$(document).on('mouseenter',function(){
+  startX=event.clientX;
+  startY=event.clientY;
+});
+    </script>
+        
+
+</html>

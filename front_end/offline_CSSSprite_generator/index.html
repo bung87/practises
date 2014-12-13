@@ -1,0 +1,94 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>i2du</title>
+	<script type="text/javascript" src="./src/lib/zepto.min.js"></script>
+	<style type="text/css">
+	#myCanvas {background: #f2f2f2;}
+	</style>
+</head>
+<body>
+	<input id="file" type="file" name="image" multiple />
+	<canvas id="myCanvas" width="500" height="300"></canvas> 
+
+<button type="button" id="download">download</button>
+<div id="result"></div>
+</body>
+<script type="text/javascript">
+function ready(){
+	$('#download').on('click',function(e){
+		var data=c.toDataURL();
+		$.saveFile(data);
+	});
+	$('#file').on('change',function(e){
+		var offsetx=0,offsety=0;
+		var files=[].slice.call(e.target.files),reader;
+		
+		$.each(files,function(k,v){
+		reader = new FileReader();
+		console.log(reader);
+		console.log(v);
+        reader.readAsDataURL(v);
+        // console.log(reader.readAsArrayBuffer(v));
+        reader.onload = function(e2){
+        	 if(this.readyState == FileReader.DONE) { 
+            var image= new Image();
+           
+            image.src=this.result;
+
+            image.onload=function(e3){    	
+            	var d=$.getImageData(this);
+            	
+
+            	if(offsetx+this.naturalWidth>=c.width){
+            		offsety+=this.naturalHeight;
+            		offsetx=0;
+            	}
+            	ctx.putImageData(d,offsetx,offsety);
+            	offsetx+=this.naturalWidth;
+
+            }
+          } 
+            // context2.putImageData(imagedata1,0,0);
+                // console.log(this.result);
+                // console.log(new DataView(this.result));
+        }
+
+		});
+	});
+	// putImageData
+	var c=$("#myCanvas").get(0);
+var ctx=c.getContext("2d");
+
+}
+$(ready);
+
+
+(function($){
+	function createCanvas(w,h){
+		var $c=$('<canvas></canvas>');
+		$c.attr('width',w);
+		$c.attr('height',h);
+		return $c;
+	}
+	function getImageData(img){
+		var w,h;
+		w=img.naturalWidth;h=img.naturalHeight;
+		var $c=createCanvas(w,h);
+		var c=$c.get(0);
+		var ctx=c.getContext("2d");
+		ctx.drawImage(img,0,0);
+		var d=ctx.getImageData(0,0,w,h);
+		$c.remove();
+		return d;
+	}
+	function saveFile(DataURL) {
+		var strDownloadMime = "image/octet-stream";
+		strData=DataURL.replace("image/png", strDownloadMime);
+		document.location.href = strData;
+	}
+	$.extend($,{createCanvas:createCanvas,getImageData:getImageData,saveFile:saveFile});
+})(Zepto);
+</script>
+</html>

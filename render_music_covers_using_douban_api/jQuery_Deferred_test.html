@@ -1,0 +1,61 @@
+
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>html5 canvas demo</title>
+<style type="text/css">
+   html *{margin: 0;padding: 0}
+html, body { width:100%; height:100%; } 
+
+canvas { display:block;background: #000;z-index: 1 ;
+-webkit-filter: blur(1px); /* Chrome, Opera */
+       -moz-filter: blur(1px);
+        -ms-filter: blur(1px);    
+            filter: blur(1px);    
+} 
+#container {position: absolute;top: 0;right: 0;bottom: 0;left: 0;
+width: 500px;height: 100px;z-index: 2;margin:auto;margin-left: auto;margin-right: auto;
+}
+</style>
+<script src="jquery-2.0.0.min.js"></script>
+<!-- <script src="http://www.quasimondo.com/StackBlurForCanvas/StackBlur.js"></script> -->
+</head>
+<body >
+    <canvas id="myCanvas" width="500" height="300"></canvas> 
+    <div id="container"></div>
+<script type="text/javascript">
+$(function(){
+    var h = $(document).height();
+            var w = $(document).width();
+        var c=document.getElementById("myCanvas");
+        c.setAttribute('width', w);
+        c.setAttribute('height', h);
+         var cxt=c.getContext("2d");
+
+     $.get('/get_covers_of_music_I_lisened_recently.php',function(data){
+      var ox=oy=0,count=0,colWidth=80,cols=w/80,rows=h/80;
+        var maindtd = $.Deferred();
+        $.each(data.albums,function(k,v){
+          var image = new Image();
+          var dtd = $.Deferred(); 
+          image.src=this.img;
+          image.onload=function(){dtd.resolve();};
+          $.when(dtd).done(function(){
+            os=Math.floor(count%cols);
+            or=Math.floor(count/cols);
+            cxt.drawImage(image,os*colWidth,or*colWidth,80,80);
+            count++;
+            if(count==data.albums.length){
+              maindtd.resolve();
+            }
+          });
+       /*   maindtd.done(function(){
+            stackBlurCanvasRGB('myCanvas',0,0,w,h,4);
+          });*/
+          
+        });
+     });
+});
+</script>  
+</body>
+</html>

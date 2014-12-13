@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>extends html element test</title>
+    <style>
+
+        item{display: block}
+    </style>
+    <script src="jquery-2.0.0.min.js"></script>
+    <script type="text/javascript">
+  /*      function object(o,e){
+            var F=function(){
+                this.e=e;
+            };
+            F.prototype= o.prototype;
+            return new F(e);
+        }
+        function $(e){
+            return object($,e);
+        }*/
+        jQuery.fn.extend({
+  setAdapter:function(ad){
+                if(ad.getCount()==0){
+
+                }else{
+
+                    for(var i= 0;i<ad.getCount();i++){
+                        var item= ad.getView(i);
+
+                       this.append(item);
+                    }
+                }
+                return this;
+            }
+  
+});
+      /*  $.prototype={
+            setAdapter:function(ad){
+                if(ad.getCount()==0){
+
+                }else{
+
+                    for(var i= 0;i<ad.getCount();i++){
+                        var item= ad.getView(i);
+
+                       this.e.appendChild(item);
+                    }
+                }
+                return this;
+            },
+            append:function($e){
+                return this.e.appendChild($e.e);
+            }
+        };*/
+        function Adapter(data){
+            this.data=data;
+        }
+        Adapter.prototype={
+            getCount:function(){
+                return this.data.length;
+            },
+            getItem:function(pos){
+                return this.data[pos];
+            },
+            getView:function(pos){
+                var item=document.createElement('item');
+                item.textContent=this.data[pos];
+                return item;
+            },
+            setData:function(data){
+                this.data=data;
+            }
+
+        };
+        function List(){}
+     
+        List.prototype = {
+            constructor:HTMLUListElement,
+            __proto__: HTMLUListElement.prototype
+
+        };
+        function Item(){}
+        Item.prototype={
+            constructor:HTMLLIElement,
+            __proto__:HTMLLIElement.prototype
+        };
+        function View(){
+            var v=document.createElement.call(document,Array.prototype.slice.apply(arguments)[0]);
+            jQuery.extend(v,{
+  setAdapter:function(ad){
+    var $this=$(this);
+                if(ad.getCount()==0){
+
+                }else{
+
+                    for(var i= 0;i<ad.getCount();i++){
+                        var item= ad.getView(i);
+
+                       $this.append(item);
+                    }
+                }
+                return $this;
+            }
+  
+});
+            return v;
+        }
+       
+        function init(){
+            ad=new Adapter(['1111','222','3333']);
+            list=new View('list');
+    $(document.body).append(list.setAdapter(ad));
+        }
+
+
+    </script>
+</head>
+<body onload="init();">
+<div>
+
+    dddd
+</div>
+
+</body>
+
+</html>
