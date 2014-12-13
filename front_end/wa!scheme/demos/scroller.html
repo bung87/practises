@@ -1,0 +1,234 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" href="../src/lib/bootstrap/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="../src/lib/font-awesome-4.0.1/css/font-awesome.min.css">
+	<style type="text/css">
+	.navbar {
+		padding: 0 10px 0 10px;
+	}
+	.row {padding: 0;margin: 0}
+	.navbar .fa{font-size: 40px;line-height: 50px;}
+	.navbar .btn{margin-top: 8px;}
+
+	#content > *{padding: 0 10px 0 10px;}
+  #wrapper {
+position: absolute;
+z-index: 1;
+top: 55px;
+bottom: 0;
+left: -9999px;
+width: 100%;
+overflow: auto;
+}
+#scroller {
+position: absolute;
+z-index: 1;
+-webkit-tap-highlight-color: rgba(0,0,0,0);
+width: 100%;
+padding: 0;
+}
+  #pullUp {
+/*background: #fff;*/
+height: 40px;
+line-height: 40px;
+padding: 5px 10px;
+border-bottom: 1px solid #ccc;
+font-weight: bold;
+font-size: 14px;
+color: #888;
+}
+#pullUp .pullUpIcon {
+/*-webkit-transform: rotate(-180deg) translateZ(0);*/
+}
+#pullDown .pullDownIcon, #pullUp .pullUpIcon {
+display: block;
+float: left;
+width: 40px;
+height: 40px;
+background: url(scroller/img/pull-icon@2x.png) 0 0 no-repeat;
+-webkit-background-size: 40px 80px;
+background-size: 40px 80px;
+/*-webkit-transition-property: -webkit-transform;*/
+/*-webkit-transition-duration: 250ms;*/
+}
+ #pullUp {
+line-height: 40px;
+font-weight: bold;
+font-size: 14px;
+color: #888;
+}
+#pullUp.flip .pullUpIcon {
+  /*-webkit-transform:rotate(0deg) translateZ(0);*/
+}
+
+#pullDown.loading .pullDownIcon, #pullUp.loading .pullUpIcon {
+  background-position:0 100%;
+ /* -webkit-transform:rotate(0deg) translateZ(0);
+  -webkit-transition-duration:0ms;
+  -webkit-animation-name:loading;
+  -webkit-animation-duration:2s;
+  -webkit-animation-iteration-count:infinite;
+  -webkit-animation-timing-function:linear;*/
+}
+
+/*@-webkit-keyframes loading {
+  from { -webkit-transform:rotate(0deg) translateZ(0); }
+  to { -webkit-transform:rotate(360deg) translateZ(0); }
+}*/
+	</style>
+	<title></title>
+    <script type="text/javascript" src="../src/lib/zepto.min.js"></script>
+  <script src="../src/lib/iscroll-lite.min.js"></script>
+  <script type="text/javascript">
+    var loadmore_id=0;
+    var url="http://www.yourdomain.com/pathtojsonapi";
+  </script>
+</head>
+<body>
+<main id="content">
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+
+<a href="#" id="pri-btn"><i class="fa fa-align-justify"></i> </a>
+
+<a href="#" id="sec-btn" class="pull-right"><i class="fa fa-user"></i></a>
+</nav>
+<div id="wrapper" style="overflow: hidden; left: 0px;">
+  <div id="scroller">
+<ul id="thelist" data-role="listview" class="list-unstyled">
+  <li><div class="media">
+        <a class="pull-left" href="#">
+          <img class="media-object" data-src="holder.js/64x64" alt="64x64" style="width: 64px; height: 64px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABN0lEQVR4Xu2YQQ6EIAxFdeXFODZnYu9qJk5C0sGiUiAx8FyKVPr76VPWEMJnmfhaEQAHsAXoARP3wIUmCAWgABSAAlBgYgXAIBgEg2AQDE4MAX6GwCAYBINgEAyCwYkVAIO1GPTe//nHOXfyU3xGG9PM1yNmzuRVDpCJ5ZKUyTwRoEfMqx3eTIBcJbdtW/Z9/w2XCtAqZncB5Atkkkc1NQFileVYFCi1fypcLqa1jzd1QM6+2va4EycKWRLTIkI3AY7FPKmmVmF5LxXvLmapCF0FiItp5QCZXClZulBAq/IVBtN9rvUAa8zSysfnqxxgfemb5iFA7Zfgm6ppWQsOwAEciXEkxpGYpXuOMgcKQAEoAAWgwCgd3ZIHFIACUAAKQAFL9xxlDhSAAlAACkCBUTq6JY/pKfAFwO6XkLwNdToAAAAASUVORK5CYII=">
+        </a>
+        <div class="media-body">
+          <h4 class="media-heading">Media heading</h4>
+          Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+        </div>
+      </div></li>
+<li>  <div class="media">
+        <a class="pull-left" href="#">
+          <img class="media-object" data-src="holder.js/64x64" alt="64x64" style="width: 64px; height: 64px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABN0lEQVR4Xu2YQQ6EIAxFdeXFODZnYu9qJk5C0sGiUiAx8FyKVPr76VPWEMJnmfhaEQAHsAXoARP3wIUmCAWgABSAAlBgYgXAIBgEg2AQDE4MAX6GwCAYBINgEAyCwYkVAIO1GPTe//nHOXfyU3xGG9PM1yNmzuRVDpCJ5ZKUyTwRoEfMqx3eTIBcJbdtW/Z9/w2XCtAqZncB5Atkkkc1NQFileVYFCi1fypcLqa1jzd1QM6+2va4EycKWRLTIkI3AY7FPKmmVmF5LxXvLmapCF0FiItp5QCZXClZulBAq/IVBtN9rvUAa8zSysfnqxxgfemb5iFA7Zfgm6ppWQsOwAEciXEkxpGYpXuOMgcKQAEoAAWgwCgd3ZIHFIACUAAKQAFL9xxlDhSAAlAACkCBUTq6JY/pKfAFwO6XkLwNdToAAAAASUVORK5CYII=">
+        </a>
+        <div class="media-body">
+          <h4 class="media-heading">Media heading</h4>
+          Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+        </div>
+      </div></li>
+ <li> <div class="media">
+        <a class="pull-left" href="#">
+          <img class="media-object" data-src="holder.js/64x64" alt="64x64" style="width: 64px; height: 64px;" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABN0lEQVR4Xu2YQQ6EIAxFdeXFODZnYu9qJk5C0sGiUiAx8FyKVPr76VPWEMJnmfhaEQAHsAXoARP3wIUmCAWgABSAAlBgYgXAIBgEg2AQDE4MAX6GwCAYBINgEAyCwYkVAIO1GPTe//nHOXfyU3xGG9PM1yNmzuRVDpCJ5ZKUyTwRoEfMqx3eTIBcJbdtW/Z9/w2XCtAqZncB5Atkkkc1NQFileVYFCi1fypcLqa1jzd1QM6+2va4EycKWRLTIkI3AY7FPKmmVmF5LxXvLmapCF0FiItp5QCZXClZulBAq/IVBtN9rvUAa8zSysfnqxxgfemb5iFA7Zfgm6ppWQsOwAEciXEkxpGYpXuOMgcKQAEoAAWgwCgd3ZIHFIACUAAKQAFL9xxlDhSAAlAACkCBUTq6JY/pKfAFwO6XkLwNdToAAAAASUVORK5CYII=">
+        </a>
+        <div class="media-body">
+          <h4 class="media-heading">Media heading</h4>
+          Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus.
+        </div>
+      </div></li>   
+     </ul>
+<div id="pullUp">
+      <span class="pullUpIcon"></span><span class="pullUpLabel">Pull up to load more...</span>
+    </div>
+   </div></div>
+</main>
+
+</body>
+<script id="data" type="text/json">{"data":{"list":[{"img":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAABN0lEQVR4Xu2YQQ6EIAxFdeXFODZnYu9qJk5C0sGiUiAx8FyKVPr76VPWEMJnmfhaEQAHsAXoARP3wIUmCAWgABSAAlBgYgXAIBgEg2AQDE4MAX6GwCAYBINgEAyCwYkVAIO1GPTe//nHOXfyU3xGG9PM1yNmzuRVDpCJ5ZKUyTwRoEfMqx3eTIBcJbdtW/Z9/w2XCtAqZncB5Atkkkc1NQFileVYFCi1fypcLqa1jzd1QM6+2va4EycKWRLTIkI3AY7FPKmmVmF5LxXvLmapCF0FiItp5QCZXClZulBAq/IVBtN9rvUAa8zSysfnqxxgfemb5iFA7Zfgm6ppWQsOwAEciXEkxpGYpXuOMgcKQAEoAAWgwCgd3ZIHFIACUAAKQAFL9xxlDhSAAlAACkCBUTq6JY/pKfAFwO6XkLwNdToAAAAASUVORK5CYII=","title":"Media heading","text":"Cras sit amet nibh libero, in gravida nulla. Nulla vel metus scelerisque ante sollicitudin commodo. Cras purus odio, vestibulum in vulputate at, tempus viverra turpis. Fusce condimentum nunc ac nisi vulputate fringilla. Donec lacinia congue felis in faucibus."}]}}</script>
+<script id="tpl" type="text/template">
+  {@each list as it,index}
+ <li> <div class="media">
+        <a class="pull-left" href="#">
+          <img class="media-object" data-src="holder.js/64x64" alt="64x64" style="width: 64px; height: 64px;" src="${it.img}">
+        </a>
+        <div class="media-body">
+          <h4 class="media-heading">${it.title}</h4>
+         ${it.text}
+        </div>
+      </div></li> 
+  {@/each}
+</script>
+<script type="text/javascript" src="../src/lib/juicer.js"></script>
+<script type="text/javascript">
+var myScroll,nomore=0,
+  $pullUpEl, pullUpOffset,
+  generatedCount = 0;
+
+function getInfo(){
+++loadmore_id;
+url=url+'/loadmore_id/'+loadmore_id;
+updatePage();
+}
+
+function updatePage(){
+  var realAction=function (){
+      var data=$.parseJSON($('#data').text());
+  var tpl=$('#tpl').text();
+if(data.data.list.length){
+  var html = juicer(tpl, data.data);
+var el = document.getElementById('thelist');
+el.innerHTML+=(html);
+}else{
+  nomore=1;
+}
+ $pullUpEl.attr('class','');
+ $pullUpEl.find('.pullUpIcon').animate({rotate: '-180deg', translateZ: 0},0);
+  $pullUpEl.find('.pullUpLabel').html('Pull up to load more...');
+  }
+  setTimeout(realAction, 2000);
+
+}
+function pullUpAction () {
+  if(nomore){
+    $pullUpEl.attr('class','');
+     setTimeout(function () { $pullUpEl.attr('class',''); }, 2000);
+  $pullUpEl.find('.pullUpLabel').html('nomore...') ;
+  }else{
+    getInfo();
+    myScroll.refresh();
+  }
+    
+}
+
+function loaded() {
+  $pullUpEl =$('#pullUp'); 
+  $pullUpEl.find('.pullUpIcon').animate({rotate: '-180deg', translateZ: 0},0);
+  pullUpOffset = $pullUpEl.offset().height;
+  myScroll = new iScroll('wrapper', {
+    // useTransition: true,
+    onRefresh: function () {
+
+     if ($pullUpEl.hasClass('loading')) {
+      $pullUpEl.attr('class','');
+        $pullUpEl.find('.pullUpLabel').html('Pull up to load more...');
+
+      }
+    },
+    onScrollMove: function () {
+    if (this.y < (this.maxScrollY - 5) && !$pullUpEl.hasClass('flip')) {
+        
+        $pullUpEl.attr('class','flip');
+        $pullUpEl.find('.pullUpIcon').animate({rotate:'0deg',translateZ:0});
+       
+        $pullUpEl.find('.pullUpLabel').html('Release to refresh...');
+        this.maxScrollY = this.maxScrollY;
+      } else if (this.y > (this.maxScrollY + 5) && $pullUpEl.hasClass('flip')) {
+      
+        $pullUpEl.attr('class','');
+        $pullUpEl.find('.pullUpLabel').html('Pull up to load more...');
+        this.maxScrollY = pullUpOffset;
+      }
+    },
+    onScrollEnd: function () {
+     if ($pullUpEl.hasClass('flip')) {
+      $pullUpEl.attr('class','loading');
+      $pullUpEl.find('.pullUpIcon').animate({rotate:'359deg',translateZ:0},'infinite');
+        $pullUpEl.find('.pullUpLabel').html('Loading...');    
+        pullUpAction();
+      }
+    }
+  }); 
+  setTimeout(function () { $('#wrapper').css({left:0}); }, 800);
+}
+// document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+$(loaded);
+
+</script>
+</html>
