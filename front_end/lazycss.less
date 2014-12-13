@@ -1,0 +1,218 @@
+//layouts
+.a{
+	position: absolute;
+}
+.b(){
+bottom: 0;
+}
+
+.c:before,.c:after {
+  content: ""; /* (. | \20 | [:space:])? */
+  display: block;/* or table ? */
+ /* height: 0;
+  line-height: 0; */
+  /*font-size: 0;*/
+  /*visibility: hidden;*/
+ }
+.c:after {    clear: both;}
+.c {zoom: 1;} /* IE < 8 ,hasLayout feature has deprecated since IE8 */
+.d{
+
+}
+.e{/*ellipsis*/
+text-overflow:ellipsis; overflow:hidden; white-space:nowrap; 
+}
+.f{
+position: fixed;
+}
+.g{
+width: 100%;
+}
+.g1{width: 10%}
+.g2{width: 20%}
+.g3{width: 30%}
+.g4{width: 40%}
+.g5{width: 50%}
+.g6{width: 60%}
+.g7{width: 70%}
+.g8{width: 80%}
+.g9{width: 90%}
+.h{/*hide*/
+display: none !important
+}
+.i{
+display: inline;
+}
+.j{
+
+}
+.k{
+
+}
+.l(){
+    left: 0;
+}
+.l{
+float: left;
+}
+.m{
+vertical-align : middle ;
+}
+.n(@which){
+    @which: none !important;
+}
+.o{
+
+}
+.p{
+position: relative;
+}
+.q{
+
+}
+.r(){
+ right: 0;   
+}
+.r{
+float: right;
+}
+
+.s{/*show*/
+display: block !important
+}
+.t(){
+top: 0;
+}
+.u{
+
+}
+.v{
+
+}
+.w{
+
+}
+.x{
+
+}
+.y{
+
+}
+.z(@index){
+z-index: @index;
+}
+//styles
+.bs(@shadow){
+    box-shadow: @shadow;
+    -webkit-box-shadow: @shadow;
+    -moz-box-shadow : @shadow;
+}
+@border-width:1px;
+@border-style:solid;
+@border-dark:@border-width @border-style #ddd;
+@border-light:@border-width @border-style #fff;
+
+
+.br(@radius: 5px) {
+  border-radius: @radius;
+  -webkit-border-radius: @radius;
+  -moz-border-radius: @radius;
+}
+
+//reset
+input[type="checkbox"],
+input[type="radio"] {
+	box-sizing: border-box; /* Addresses box sizing set to content-box in IE8/9 */
+	padding: 0; /* Addresses excess padding in IE8/9 */
+}
+//still can not hide the magnifier,to avoid this simply use text filed instead.
+
+input[type="search"] {
+	-webkit-appearance: textfield; /* Addresses appearance set to searchfield in S5, Chrome */
+	-moz-box-sizing: content-box;
+	-webkit-box-sizing: content-box; /* Addresses box sizing set to border-box in S5, Chrome (include -moz to future-proof) */
+	box-sizing: content-box;
+}
+input[type="search"]::-webkit-search-decoration { /* Corrects inner padding displayed oddly in S5, Chrome on OSX */
+	-webkit-appearance: none;
+}
+button::-moz-focus-inner,
+input::-moz-focus-inner { /*  Corrects inner padding and border displayed oddly in FF3/4 
+                             @see www.sitepen.com/blog/2008/05/14/the-devils-in-the-details-fixing-dojos-toolbar-buttons/
+                             @see http://stackoverflow.com/questions/1433232/moz-focus-inner  */
+	border: 0;
+	padding: 0;
+}
+
+@placeholder-color:inherit;
+::-webkit-input-placeholder {
+   color:@placeholder-color;
+}
+
+:-moz-placeholder { /* Firefox 18- */
+   color: @placeholder-color;  
+}
+
+::-moz-placeholder {  /* Firefox 19+ */
+   color: @placeholder-color;  
+}
+
+:-ms-input-placeholder {  
+   color: @placeholder-color;  
+}
+@selection-color:inherit;
+@selection-background:inherit;
+.tap-color(@color){
+     -webkit-tap-highlight-color:@color;
+}
+
+::selection {
+color:@selection-color;
+background:@selection-background;
+}
+::-moz-selection {
+color:@selection-color;
+background:@selection-background;
+}
+::-webkit-selection {
+color:@selection-color;
+background:@selection-background;
+
+}
+summary{cursor:pointer}
+summary:focus {
+outline: none;
+}
+summary::-webkit-details-marker{display:none}
+//custom
+/*details summary:after{content:"-"}*/
+/*details[open] summary:after{content:"+"}*/
+
+//animation
+.transition(@property,@duration,@timing-function,@delay){
+transition: @property @duration @timing-function @delay;
+-webkit-transition: @property @duration @timing-function @delay;
+ -moz-transition:  @property @duration @timing-function @delay;
+-o-transition:  @property @duration @timing-function @delay;
+}
+
+//components
+/*.btn{
+    .rc;
+}
+.list li{
+.p;
+display: block;
+padding: 10px 15px;
+margin-bottom: -1px;
+border-bottom: @border-dark;
+}
+.list li:after {
+content: "";
+display: block;
+border-bottom: @border-light;
+.a;
+.b;
+width: 100%;
+left: 0;
+}*/
